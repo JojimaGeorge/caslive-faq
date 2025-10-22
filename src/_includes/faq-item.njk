@@ -1,0 +1,17 @@
+---
+layout: base.njk
+---
+<div class="faq-detail">
+  <nav class="breadcrumb">
+    <a href="/">よくあるご質問</a>
+    <span class="breadcrumb-separator">＞</span>
+    <span>{{ category }}</span>
+  </nav>
+
+  <article class="faq-article">
+    <h1 class="faq-title">{{ title }}</h1>
+    <div class="faq-content">
+      {{ content | safe }}
+    </div>
+  </article>
+</div>

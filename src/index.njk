@@ -1,0 +1,57 @@
+---
+layout: base.njk
+title: よくあるご質問
+---
+<div class="faq-list-page">
+  <div class="search-section">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="検索" autocomplete="off" />
+      <div class="search-suggestions" id="searchSuggestions"></div>
+    </div>
+  </div>
+
+  <div class="category-section">
+    <h2 class="section-title">カテゴリー</h2>
+    <div class="category-buttons">
+      <button class="category-btn active" data-category="すべて">すべて</button>
+      <button class="category-btn" data-category="アカウント">アカウント</button>
+      <button class="category-btn" data-category="配信">配信</button>
+      <button class="category-btn" data-category="視聴">視聴</button>
+      <button class="category-btn" data-category="レベル・ランク">レベル・ランク</button>
+      <button class="category-btn" data-category="不具合">不具合</button>
+      <button class="category-btn" data-category="コイン・ギフト">コイン・ギフト</button>
+      <button class="category-btn" data-category="商品購入">商品購入</button>
+      <button class="category-btn" data-category="商品購入">商品購入</button>
+      <button class="category-btn" data-category="商品購入">商品購入</button>
+      <button class="category-btn" data-category="商品購入">商品購入</button>
+    </div>
+  </div>
+
+  <div class="faq-list-section">
+    <h2 class="section-title"><span id="currentCategory">すべて</span> の一覧</h2>
+    <ul class="faq-list" id="faqList">
+      {% for item in collections.faq %}
+      <li class="faq-item" data-category="{{ item.data.category }}" data-title="{{ item.data.title | lower }}">
+        <a href="{{ item.url }}">{{ item.data.title }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="pagination" id="pagination">
+    <!-- JavaScriptで動的生成 -->
+  </div>
+</div>
+
+<script>
+// FAQ データを JavaScript で使用できるようにする
+window.faqData = [
+  {% for item in collections.faq %}
+  {
+    title: "{{ item.data.title }}",
+    category: "{{ item.data.category }}",
+    url: "{{ item.url }}"
+  }{% if not loop.last %},{% endif %}
+  {% endfor %}
+];
+</script>

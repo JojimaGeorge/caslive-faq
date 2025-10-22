@@ -1,0 +1,91 @@
+---
+layout: base.njk
+title: 検索結果
+permalink: /search.html
+---
+<div class="faq-list-page">
+  <div class="search-section">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="検索" autocomplete="off" />
+      <div class="search-suggestions" id="searchSuggestions"></div>
+    </div>
+  </div>
+
+  <div class="search-results-section">
+    <h2 class="section-title">「<span id="searchQuery"></span>」の検索結果 (<span id="resultCount">0</span>件)</h2>
+    <ul class="faq-list" id="searchResults">
+      <!-- JavaScriptで動的生成 -->
+    </ul>
+    <div id="noResults" style="display: none; padding: 40px 0; text-align: center; color: #999;">
+      検索結果が見つかりませんでした
+    </div>
+  </div>
+</div>
+
+<script>
+// FAQ データを JavaScript で使用できるようにする
+window.faqData = [
+  {% for item in collections.faq %}
+  {
+    title: "{{ item.data.title }}",
+    category: "{{ item.data.category }}",
+    url: "{{ item.url }}"
+  }{% if not loop.last %},{% endif %}
+  {% endfor %}
+];
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // URLパラメータから検索クエリを取得
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('q');
+
+  const searchInput = document.getElementById('searchInput');
+  const searchQuery = document.getElementById('searchQuery');
+  const resultCount = document.getElementById('resultCount');
+  const searchResults = document.getElementById('searchResults');
+  const noResults = document.getElementById('noResults');
+
+  if (query) {
+    searchInput.value = query;
+    searchQuery.textContent = query;
+
+    // 検索実行
+    performSearch(query);
+  }
+
+  function performSearch(searchTerm) {
+    const lowerSearchTerm = searchTerm.toLowerCase();
+
+    // FAQデータから検索
+    const matches = window.faqData.filter(faq => {
+      return faq.title.toLowerCase().includes(lowerSearchTerm) ||
+             faq.category.toLowerCase().includes(lowerSearchTerm);
+    });
+
+    resultCount.textContent = matches.length;
+
+    if (matches.length === 0) {
+      searchResults.style.display = 'none';
+      noResults.style.display = 'block';
+      return;
+    }
+
+    searchResults.style.display = 'block';
+    noResults.style.display = 'none';
+
+    // 検索結果を表示
+    let html = '';
+    matches.forEach(faq => {
+      html += `
+        <li class="faq-item visible">
+          <a href="${faq.url}">${faq.title}</a>
+        </li>
+      `;
+    });
+
+    searchResults.innerHTML = html;
+  }
+});
+</script>
