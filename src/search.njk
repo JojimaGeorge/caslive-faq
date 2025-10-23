@@ -29,7 +29,7 @@ window.faqData = [
   {
     title: "{{ item.data.title }}",
     category: "{{ item.data.category }}",
-    url: "{{ item.url }}"
+    url: "{{ item.url | url }}"
   }{% if not loop.last %},{% endif %}
   {% endfor %}
 ];

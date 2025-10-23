@@ -29,7 +29,7 @@ title: よくあるご質問
     <ul class="faq-list" id="faqList">
       {% for item in collections.faq %}
       <li class="faq-item" data-category="{{ item.data.category }}" data-title="{{ item.data.title | lower }}">
-        <a href="{{ item.url }}">{{ item.data.title }}</a>
+        <a href="{{ item.url | url }}">{{ item.data.title }}</a>
       </li>
       {% endfor %}
     </ul>
@@ -47,7 +47,7 @@ window.faqData = [
   {
     title: "{{ item.data.title }}",
     category: "{{ item.data.category }}",
-    url: "{{ item.url }}"
+    url: "{{ item.url | url }}"
   }{% if not loop.last %},{% endif %}
   {% endfor %}
 ];
