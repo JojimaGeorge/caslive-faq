@@ -131,7 +131,7 @@ ul {
   transform: translateY(-50%);
   width: 20px;
   height: 20px;
-  background-image: url('/images/search.svg');
+  background-image: url('../images/search.svg');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
