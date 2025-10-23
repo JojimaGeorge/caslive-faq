@@ -58,8 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
     displayMatches.forEach(faq => {
       html += `
         <div class="search-suggestion-item" data-url="${faq.url}">
-          <div class="search-suggestion-title">[FAQ] ${faq.title}</div>
-          <div class="search-suggestion-category">困ったときは？</div>
+          <div class="search-suggestion-title">${faq.title}</div>
+          <div class="search-suggestion-category">${faq.category}</div>
         </div>
       `;
     });
