@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
   if (categoryButtons.length === 0) return;
 
   categoryButtons.forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
       const category = this.getAttribute('data-category');
 
       // アクティブ状態を更新
