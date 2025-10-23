@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>検索結果 | CasLive - よくあるご質問</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-main">
+      <h1 class="logo">
+        <a href="/">
+          <img src="/images/CasLive_logo.svg" alt="CasLive">
+        </a>
+      </h1>
+      <p class="header-title">よくあるご質問</p>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="faq-list-page">
+  <div class="search-section">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="検索" autocomplete="off" />
+      <div class="search-suggestions" id="searchSuggestions"></div>
+    </div>
+  </div>
+
+  <div class="search-results-section">
+    <h2 class="section-title">「<span id="searchQuery"></span>」の検索結果 (<span id="resultCount">0</span>件)</h2>
+    <ul class="faq-list" id="searchResults">
+      <!-- JavaScriptで動的生成 -->
+    </ul>
+    <div id="noResults" style="display: none; padding: 40px 0; text-align: center; color: #999;">
+      検索結果が見つかりませんでした
+    </div>
+  </div>
+</div>
+
+<script>
+// FAQ データを JavaScript で使用できるようにする
+window.faqData = [
+  
+  {
+    title: "商品購入の支払い方法は？",
+    category: "商品購入",
+    url: "/faq/product-payment-methods/"
+  },
+  
+  {
+    title: "商品購入でエラーが出ました",
+    category: "商品購入",
+    url: "/faq/product-purchase-error/"
+  },
+  
+  {
+    title: "商品購入の手順は？",
+    category: "商品購入",
+    url: "/faq/product-purchase-process/"
+  },
+  
+  {
+    title: "商品購入後のキャンセル・返品は？",
+    category: "商品購入",
+    url: "/faq/product-return-policy/"
+  },
+  
+  {
+    title: "会員登録の手順を知りたい",
+    category: "アカウント",
+    url: "/faq/account-registration/"
+  },
+  
+  {
+    title: "プロフィールの設定方法",
+    category: "アカウント",
+    url: "/faq/profile-settings/"
+  },
+  
+  {
+    title: "パスワードを忘れた場合の対処法",
+    category: "アカウント",
+    url: "/faq/password-reset/"
+  },
+  
+  {
+    title: "アカウントを削除したい",
+    category: "アカウント",
+    url: "/faq/account-deletion/"
+  },
+  
+  {
+    title: "配信を始める方法",
+    category: "配信",
+    url: "/faq/streaming-start/"
+  },
+  
+  {
+    title: "配信の画質・音質を上げる方法",
+    category: "配信",
+    url: "/faq/streaming-quality/"
+  },
+  
+  {
+    title: "配信を終了する方法",
+    category: "配信",
+    url: "/faq/streaming-end/"
+  },
+  
+  {
+    title: "配信アーカイブの設定方法",
+    category: "配信",
+    url: "/faq/streaming-archive/"
+  },
+  
+  {
+    title: "配信を視聴する方法",
+    category: "視聴",
+    url: "/faq/viewing-how-to/"
+  },
+  
+  {
+    title: "コメントのルールとマナー",
+    category: "視聴",
+    url: "/faq/comment-rules/"
+  },
+  
+  {
+    title: "フォロー・通知設定について",
+    category: "視聴",
+    url: "/faq/follow-notification/"
+  },
+  
+  {
+    title: "ポイントとコインの違いは？",
+    category: "コイン・ギフト",
+    url: "/faq/point-coin-difference/"
+  },
+  
+  {
+    title: "コインの購入方法は？",
+    category: "コイン・ギフト",
+    url: "/faq/coin-purchase/"
+  },
+  
+  {
+    title: "ギフトの送り方を知りたい",
+    category: "コイン・ギフト",
+    url: "/faq/gift-sending/"
+  },
+  
+  {
+    title: "ポイントの換金方法",
+    category: "コイン・ギフト",
+    url: "/faq/point-withdrawal/"
+  },
+  
+  {
+    title: "レベル・ランクシステムについて",
+    category: "レベル・ランク",
+    url: "/faq/level-rank-system/"
+  },
+  
+  {
+    title: "経験値の効率的な稼ぎ方",
+    category: "レベル・ランク",
+    url: "/faq/exp-earning/"
+  },
+  
+  {
+    title: "ランクごとの特典を知りたい",
+    category: "レベル・ランク",
+    url: "/faq/rank-benefits/"
+  },
+  
+  {
+    title: "配信が再生されない・止まる",
+    category: "不具合",
+    url: "/faq/video-not-playing/"
+  },
+  
+  {
+    title: "ログインできない時の対処法",
+    category: "不具合",
+    url: "/faq/login-error/"
+  },
+  
+  {
+    title: "音が出ない・聞こえない",
+    category: "不具合",
+    url: "/faq/sound-issue/"
+  }
+  
+];
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // URLパラメータから検索クエリを取得
+  const urlParams = new URLSearchParams(window.location.search);
+  const query = urlParams.get('q');
+
+  const searchInput = document.getElementById('searchInput');
+  const searchQuery = document.getElementById('searchQuery');
+  const resultCount = document.getElementById('resultCount');
+  const searchResults = document.getElementById('searchResults');
+  const noResults = document.getElementById('noResults');
+
+  if (query) {
+    searchInput.value = query;
+    searchQuery.textContent = query;
+
+    // 検索実行
+    performSearch(query);
+  }
+
+  function performSearch(searchTerm) {
+    const lowerSearchTerm = searchTerm.toLowerCase();
+
+    // FAQデータから検索
+    const matches = window.faqData.filter(faq => {
+      return faq.title.toLowerCase().includes(lowerSearchTerm) ||
+             faq.category.toLowerCase().includes(lowerSearchTerm);
+    });
+
+    resultCount.textContent = matches.length;
+
+    if (matches.length === 0) {
+      searchResults.style.display = 'none';
+      noResults.style.display = 'block';
+      return;
+    }
+
+    searchResults.style.display = 'block';
+    noResults.style.display = 'none';
+
+    // 検索結果を表示
+    let html = '';
+    matches.forEach(faq => {
+      html += `
+        <li class="faq-item visible">
+          <a href="${faq.url}">${faq.title}</a>
+        </li>
+      `;
+    });
+
+    searchResults.innerHTML = html;
+  }
+});
+</script>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <h2 class="footer-logo">
+        <img src="/images/CasLive_logoW.svg" alt="CasLive">
+      </h2>
+      <nav class="footer-nav">
+        <a href="#">資金決済法に基づく表記</a>
+        <a href="#">運営会社</a>
+        <a href="#">利用規約</a>
+        <a href="#">プライバシーポリシー</a>
+        <a href="/">FAQ</a>
+      </nav>
+      <p class="footer-copyright">© CasLive Inc.</p>
+    </div>
+  </footer>
+
+  <script src="/js/search.js"></script>
+  <script src="/js/pagination.js"></script>
+  <script src="/js/filter.js"></script>
+</body>
+</html>
