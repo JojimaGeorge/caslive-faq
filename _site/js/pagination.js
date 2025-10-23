@@ -23,7 +23,7 @@ class Pagination {
     return Math.ceil(this.filteredItems.length / this.itemsPerPage);
   }
 
-  showPage(page) {
+  showPage(page, shouldScroll = true) {
     this.currentPage = page;
 
     // すべてのアイテムを非表示
@@ -42,8 +42,10 @@ class Pagination {
 
     this.renderPagination();
 
-    // ページトップにスクロール
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // ページトップにスクロール（オプション）
+    if (shouldScroll) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   renderPagination() {

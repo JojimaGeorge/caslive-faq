@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
   categoryButtons.forEach(button => {
     button.addEventListener('click', function(e) {
       e.preventDefault();
+      e.stopPropagation();
+
       const category = this.getAttribute('data-category');
 
       // アクティブ状態を更新
@@ -27,6 +29,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // フィルタリング
       filterByCategory(category);
+
+      // デバッグログ
+      console.log('Category clicked:', category);
+      console.log('Scroll position:', window.scrollY);
     });
   });
 
@@ -42,9 +48,12 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
 
-    // ページネーションを更新
+    // ページネーションを更新（スクロール無効）
     if (window.pagination) {
-      window.pagination.setFilteredItems(filteredItems);
+      window.pagination.filteredItems = filteredItems;
+      window.pagination.currentPage = 1;
+      // showPage(page, shouldScroll) でスクロール無効化
+      window.pagination.showPage(1, false);
     }
 
     // ページネーションを表示
